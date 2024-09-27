@@ -1,3 +1,7 @@
+# Forge cache
+
+cache/*
+
 # Logs
 logs
 *.log
